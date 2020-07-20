@@ -18,9 +18,49 @@
 <div id="app">
     <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-sm">
         <div class="container">
-            <div class="row">
-                <a href="" class="navbar-brand">ArtCraft</a>
-            </div>
+            <!-- Left Side Of Navbar -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">ArtCraft</a>
+                </li>
+            </ul>
+            <!-- Right Side Of Navbar -->
+            <ul class="navbar-nav ml-auto text-white">
+                <!-- Authentication Links -->
+                @guest
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/register">Register</a>
+                        </li>
+                @else
+                    <li class="nav-item active">
+                        <a class="nav-link" href="">upload</a>
+                    </li>
+                    <li class="nav-item dropdown active text-capitalize">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            {{ Auth::user()->username }} <span class="caret"></span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="">
+                                Profile
+                            </a>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+                            <form id="logout-form" action="" method="POST"
+                                  style="display: none;">
+                                <!--@csrf-->
+                            </form>
+
+                        </div>
+                    </li>
+                @endguest
         </div>
     </nav>
     <main class="py-4">

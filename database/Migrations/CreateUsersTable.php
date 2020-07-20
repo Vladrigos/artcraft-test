@@ -7,19 +7,21 @@ use Database\Migration;
 
 class CreateUsersTable extends Migration
 {
-    public function up()
+    public function up() : void
     {
         Capsule::schema()->create('users', function ($table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->string('user_hash')->nullable();
             $table->string('photo')->nullable();
-            $table->string('key')->nullable()->unique();
             $table->timestamps();
         });
     }
 
-    public function down()
+    public function down() : void
     {
         Capsule::schema()->dropIfExists('users');
     }

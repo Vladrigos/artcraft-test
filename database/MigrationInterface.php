@@ -4,6 +4,6 @@ namespace Database;
 
 interface MigrationInterface
 {
-    public function up();
-    public function down();
+    public function up() : void;
+    public function down() : void;
 }

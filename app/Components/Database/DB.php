@@ -6,8 +6,8 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class DB
 {
-    private $capsule;
-    private $config;
+    private Capsule $capsule;
+    private Array $config;
 
     public function __construct(Capsule $capsule, array $config)
     {
@@ -19,7 +19,7 @@ class DB
         $this->bootEloquent();
     }
 
-    private function addConnection()
+    private function addConnection() : void
     {
         $this->capsule->addConnection([
             'driver'    => $this->config['DB_CONNECTION'],
@@ -34,13 +34,13 @@ class DB
     }
 
     // Setup the Eloquent ORM
-    private function bootEloquent()
+    private function bootEloquent() : void
     {
         $this->capsule->bootEloquent();
     }
 
     //Make this capsule instance available globally.
-    private function setAsGlobal()
+    private function setAsGlobal() : void
     {
         $this->capsule->setAsGlobal();
     }
