@@ -27,7 +27,8 @@
             <!-- Right Side Of Navbar -->
             <ul class="navbar-nav ml-auto text-white">
                 <!-- Authentication Links -->
-                @guest
+                <?php $auth = new \App\Helpers\Auth();?>
+                @if(!$auth->isAuth())
                     <li class="nav-item active">
                         <a class="nav-link" href="/login">Login</a>
                     </li>
@@ -36,31 +37,31 @@
                         </li>
                 @else
                     <li class="nav-item active">
-                        <a class="nav-link" href="">upload</a>
+                        <a class="nav-link" href=""></a>
                     </li>
                     <li class="nav-item dropdown active text-capitalize">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->username }} <span class="caret"></span>
+                            {{ $auth->getUser()->name }} <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="">
+                            <a class="dropdown-item" href="/users/{{$auth->getUser()->id}}">
                                 Profile
                             </a>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
+                            <a class="dropdown-item" href="/logout"
                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
+                                Logout
                             </a>
-                            <form id="logout-form" action="" method="POST"
+                            <form id="logout-form" action="/logout" method="POST"
                                   style="display: none;">
-                                <!--@csrf-->
+                                <!--csrf-->
                             </form>
 
                         </div>
                     </li>
-                @endguest
+                @endif
         </div>
     </nav>
     <main class="py-4">

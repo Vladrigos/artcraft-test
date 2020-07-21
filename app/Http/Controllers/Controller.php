@@ -33,7 +33,7 @@ abstract class Controller
         return new RedirectResponse($url, $status, $headers);
     }
 
-    protected function responseAsJSON($data): Response
+    protected function responseAsJSON(array $data): Response
     {
         $response = $this->response;
         $response->setContent(json_encode([
@@ -43,7 +43,7 @@ abstract class Controller
         return $response;
     }
 
-    protected function responseAsXML($data): Response
+    protected function responseAsXML(array $data): Response
     {
         $response = $this->response;
 
@@ -70,6 +70,4 @@ abstract class Controller
 
         return $response->setContent($xml_data->asXML());
     }
-
-
 }

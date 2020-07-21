@@ -33,6 +33,7 @@ class Validator
         $violations = $this->validator->validate($name, array(
             new Assert\Length(array('min' => 2)),
             new Assert\NotBlank(),
+            new Assert\Regex(['pattern' => "!^[a-zA-Z1-9а-яёА-ЯЁ]{1,}$!u", "message" => 'The name can only contain letters and numbers'])
         ));
 
         if (0 !== count($violations))

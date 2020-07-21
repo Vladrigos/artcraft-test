@@ -30,16 +30,16 @@ class Kernel
 
     protected Request $request;
 
-    protected $allMiddlewares = [
-        'Auth'            => '\App\Http\Middleware\Authenticate',
+    protected array $allMiddlewares = [
+        'Auth'            => '\App\Http\Middleware\Auth',
         'VerifyCsrfToken' => '\App\Http\Middleware\VerifyCsrfToken',
     ];
 
-    protected $requiredMiddlewares = [
+    protected array $requiredMiddlewares = [
         'VerifyCsrfToken'
     ];
 
-    protected $routeMiddlewares = [];
+    protected array $routeMiddlewares = [];
 
     public function __construct(Request $request)
     {
@@ -75,28 +75,21 @@ class Kernel
         $capsule = new Capsule;
         $this->router = new MyRouter($this->request);
         $this->db = new DB($capsule, $dbconfig);
-        $views = dirname(__DIR__,2) . '/resources/views';
-        $cache = dirname(__DIR__,2) . '/storage/cache';
-        $this->blade = new BladeOne($views,$cache,BladeOne::MODE_DEBUG);
+        $views = dirname(__DIR__, 2) . '/resources/views';
+        $cache = dirname(__DIR__, 2) . '/storage/cache';
+        $this->blade = new BladeOne($views, $cache, BladeOne::MODE_DEBUG);
     }
 
     public function callController($controller, array $attributes): Response
     {
-        if (is_callable($controller))
-        {
-            echo "callable";
-            return call_user_func_array($controller, $attributes);
-        } else
-        {
-            $controllerPath = "\App\Http\Controllers\\" . $controller;
-            $controllerActionName = $attributes['method'];
-            unset($attributes['method']);
-            unset($attributes['_route']);
-            unset($attributes['_controller']);
-            $controllerObject = new $controllerPath(); //(rofl)
+        $controllerPath = "\App\Http\Controllers\\" . $controller;
+        $controllerActionName = $attributes['method'];
+        unset($attributes['method']);
+        unset($attributes['_route']);
+        unset($attributes['_controller']);
+        $controllerObject = new $controllerPath(); //(rofl)
 
-            return call_user_func_array([$controllerObject, $controllerActionName], $attributes);
-        }
+        return call_user_func_array([$controllerObject, $controllerActionName], $attributes);
     }
 
     protected function setMiddlewares(&$attributes)
@@ -127,6 +120,6 @@ class Kernel
                 return new Response($page, $middlewareResult);
             }
         }
-        return FALSE;
+        return false;
     }
 }

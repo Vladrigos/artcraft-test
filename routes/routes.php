@@ -9,55 +9,66 @@ $routes = new RouteCollection();
 $routes->add('index', new Route('/',
     [
         '_controller' => 'UserController',
-        'method'     => 'index',
+        'method'      => 'index',
     ],
-    [],['Auth'],'',[],'GET'
+    [], ['Auth'], '', [], 'GET'
 ));
 $routes->add('create', new Route('/register',
     [
         '_controller' => 'UserController',
-        'method'     => 'create',
+        'method'      => 'create',
     ],
-    [],[],'',[],'GET'
+    [], [], '', [], 'GET'
 ));
 $routes->add('store', new Route('/register',
     [
         '_controller' => 'UserController',
-        'method'     => 'store',
+        'method'      => 'store',
     ],
-    [],[],'',[],'POST'
+    [], [], '', [], 'POST'
 ));
 //middleware auth mb
-$routes->add('show', new Route('/{id}',
+$routes->add('show', new Route('/users/{id}',
     [
         '_controller' => 'UserController',
-        'method'     => 'show',
+        'method'      => 'show',
+        'middleware'  => ['Auth'],
     ],
-    ['id' => '[0-9]+'],['Auth'],'',[],'GET'
+    ['id' => '[0-9]+'], ['Auth'], '', [], 'GET'
 ));
 
 $routes->add('login', new Route('/login',
     [
-        '_controller' => 'UserController',
-        'method'     => 'login',
+        '_controller' => 'AuthController',
+        'method'      => 'login',
     ],
-    [],[],'',[],'GET'
+    [], [], '', [], 'GET'
 ));
 
-$routes->add('loginPost', new Route('/login',
+$routes->add('auth', new Route('/login',
     [
-        '_controller' => 'UserController',
-        'method'     => 'loginPost',
+        '_controller' => 'AuthController',
+        'method'      => 'auth',
     ],
-    [],[],'',[],'POST'
+    [], [], '', [], 'POST'
+));
+
+$routes->add('logout', new Route('/logout',
+    [
+        '_controller' => 'AuthController',
+        'method'      => 'logout',
+        'middleware'  => ['Auth'],
+    ],
+    [], ['Auth'], '', [], 'POST'
 ));
 
 $routes->add('userAPI', new Route('/api/get_users/{type}/{key}',
     [
         '_controller' => 'Api\UserController',
-        'method'     => 'getUsers',
+        'method'      => 'getUsers',
+        'middleware'  => ['Auth'],
     ],
-    ['type' => '(json|xml)'],[],'',[],'GET'
+    ['type' => '(json|xml)'], [], '', [], 'GET'
 ));
 
 return $routes;
