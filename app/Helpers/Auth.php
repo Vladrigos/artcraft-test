@@ -10,7 +10,7 @@ class Auth
 {
     protected bool $authorized = false;
     protected Request $request;
-    protected User $user;
+    protected $user;
     protected string $hash;
 
     public function __construct()

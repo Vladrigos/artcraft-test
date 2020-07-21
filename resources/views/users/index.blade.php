@@ -6,9 +6,19 @@
             <div class="col-md-12">
                 @if($auth->isAuth())
                     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-                        <!--<a class="btn btn-primary" href="/generate">Сгенерировать ключ для API</a>-->
-                        <a class="small" href="/api/get_users/xml/sad">Получить список пользователей XML</a>
-                        <a class="small" href="/api/get_users/json/asd">Получить список пользователей JSON</a>
+                        @if(!$auth->getUser()->api_token)<a class="btn btn-primary" href="/generateToken">Сгенерировать
+                            ключ для API</a>
+                        @else
+                            Your token for API end : {{$auth->getUser()->token_end}}
+                        @endif
+                            @if($session->getFlashBag()->get('invalidToken'))
+                                <div class="alert alert-danger">Error! Invalid Token!</div>
+                            @endif
+
+                        <a class="small" href="/api/get_users/xml/{{$auth->getUser()->api_token ?? "empty"}}">Получить список
+                            пользователей XML</a>
+                        <a class="small" href="/api/get_users/json/{{$auth->getUser()->api_token ?? "empty"}}">Получить список
+                            пользователей JSON</a>
                     </nav>
 
                     <div class="card">

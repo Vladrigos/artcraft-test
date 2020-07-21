@@ -18,11 +18,12 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class UserController extends Controller
 {
     private UserService $service;
+    private $session;
 
     public function __construct()
     {
         parent::__construct();
-
+        $this->session = new Session();
         $this->service = new UserService;
     }
 
@@ -38,7 +39,7 @@ class UserController extends Controller
         $users = User::orderBy($sort, $order)->get();
         $auth = new Auth();
         $swappedOrder = ($order === 'desc') ? 'asc' : 'desc';
-        return $this->render('users.index', ['users' => $users, 'auth' => $auth, 'swappedOrder' => $swappedOrder]);
+        return $this->render('users.index', ['users' => $users, 'auth' => $auth, 'swappedOrder' => $swappedOrder, 'session' => $this->session]);
     }
 
     /*
@@ -51,15 +52,14 @@ class UserController extends Controller
 
         $captcha = $builder->getPhrase();
 
-        $session = new Session();
-        $session->getFlashBag()->set('captcha', $captcha);
+        $this->session->getFlashBag()->set('captcha', $captcha);
 
         $csrf = new Csrf();
         $csrf = $csrf->getToken();
 
         return $this->render('auth.register',
             ['builder'    => $builder,
-             'session'    => $session,
+             'session'    => $this->session,
              'csrf_token' => $csrf,
             ]);
     }
@@ -70,18 +70,17 @@ class UserController extends Controller
     public function store()
     {
         $request = Request::createFromGlobals();
-        $session = new Session();
 
         $name = $request->request->get('name');
         $email = $request->request->get('email');
         $password = $request->request->get('password');
         $photo = $request->files->get('photo');
-        $serverCaptcha = mb_strtolower($session->getFlashBag()->get('captcha')[0]);
+        $serverCaptcha = mb_strtolower($this->session->getFlashBag()->get('captcha')[0]);
         $userCaptcha = mb_strtolower($request->request->get('captcha'));
 
         if ($errors = $this->service->validate($name, $email, $password, $photo, $serverCaptcha, $userCaptcha))
         {
-            $session->getFlashBag()->setAll([
+            $this->session->getFlashBag()->setAll([
                 'errors' => $errors,
                 'name'   => $name,
                 'email'  => $email

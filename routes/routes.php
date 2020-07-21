@@ -62,6 +62,15 @@ $routes->add('logout', new Route('/logout',
     [], ['Auth'], '', [], 'POST'
 ));
 
+$routes->add('generateToken', new Route('/generateToken',
+    [
+        '_controller' => 'Api\UserController',
+        'method'      => 'generateToken',
+        'middleware'  => ['Auth'],
+    ],
+    [], ['Auth'], '', [], 'GET'
+));
+
 $routes->add('userAPI', new Route('/api/get_users/{type}/{key}',
     [
         '_controller' => 'Api\UserController',
