@@ -37,7 +37,7 @@ class UserController extends Controller
         {
             $token = $service->generateCode();
             $auth->getUser()->api_token = $token;
-            $auth->getUser()->token_end = date('Y-m-d-h:i:s', time() + 60 * 60);
+            $auth->getUser()->token_end = date('Y-m-d-H:i:s', time() + 60 * 60);
             $auth->getUser()->save();
         }
         return $this->redirect('/');
